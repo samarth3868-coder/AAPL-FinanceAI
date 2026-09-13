@@ -41,7 +41,7 @@ The dashboard displays:
 <img src="P2.png" alt="Latest AAPL news and next-day prediction" width="100%">
 </p>
 
-## Model workflow
+## Model Architecture
 
 ```
 Historical AAPL data ──► Technical indicators ──┐
