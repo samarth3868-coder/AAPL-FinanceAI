@@ -50,21 +50,19 @@ The dashboard displays:
 
 ## Technology stack
 
-- **Python** — application and data-processing language
-
-- **Streamlit** — interactive dashboard
-
-- **yfinance** — historical AAPL market data
-
-- **Alpha Vantage** — financial-news data
-
-- **FinBERT** — finance-specific sentiment analysis
-
-- **TensorFlow/Keras** — LSTM direction model
-
-- **PyTorch and Transformers** — sentiment-model inference
+| Technology | Role in the project |
+| --- | --- |
+| **Python** | Application logic and data processing |
+| **Streamlit** | Interactive dashboard and user interface |
+| **yfinance** | Historical AAPL market data |
+| **Alpha Vantage** | Financial-news data |
+| **FinBERT** | Finance-specific sentiment analysis |
+| **TensorFlow / Keras** | LSTM direction model |
+| **PyTorch + Transformers** | Sentiment-model inference |
 
 ## Run locally
+
+Follow these steps to run the dashboard locally.
 
 ### 1. Clone the repository
 
@@ -112,4 +110,3 @@ streamlit run app.py
 ## Limitations
 
 This project is designed for education and experimentation. It does not guarantee prediction accuracy, provide financial advice, or replace independent research. Market and news data may be delayed or temporarily unavailable. The model is trained for AAPL and should not automatically be applied to other securities.
-
