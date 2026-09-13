@@ -1,21 +1,15 @@
 <div align="center">
 
-# AAPL Finance AI
+# AAPL Market Intelligence
 
 ### AI-powered market intelligence for Apple stock
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20Dashboard-2563EB?style=for-the-badge)](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)
-[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM-FF6F00?logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-FinBERT-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20Dashboard-2563EB?style=for-the-badge)](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)[![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)[![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM-FF6F00?logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)[![PyTorch](https://img.shields.io/badge/PyTorch-FinBERT-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 
 **A polished Streamlit dashboard combining technical indicators, financial-news sentiment, and an LSTM model to estimate AAPL's next-day direction.**
 
-</div>
-
-<p align="center">
-  <img src="assets/dashboard-preview.svg" alt="AAPL Finance AI dashboard preview" width="100%">
+</div> <p align="center">
+<img src="assets/dashboard-preview.svg" alt="AAPL Finance AI dashboard preview" width="100%">
 </p>
 
 > **Educational project:** Model outputs are experimental signals, not investment advice or a guarantee of future returns.
@@ -26,7 +20,7 @@ Financial analysis often requires bringing together structured market data and u
 
 ## Live demo
 
-**[Open the AAPL Finance AI dashboard](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)**
+[**Open the AAPL Finance AI dashboard**](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)
 
 ## Dashboard highlights
 
@@ -42,30 +36,40 @@ Financial analysis often requires bringing together structured market data and u
 ## System architecture
 
 <p align="center">
-  <img src="assets/architecture.png" alt="AAPL Finance AI system architecture" width="100%">
+<img src="assets/architecture.png" alt="AAPL Finance AI system architecture" width="100%">
 </p>
 
 The model workflow is:
 
 1. Download AAPL price history from Yahoo Finance.
-2. Calculate daily returns, five-day returns, moving averages, volatility, and historical sentiment features.
-3. Retrieve recent AAPL headlines from Alpha Vantage.
-4. Classify headline sentiment with **ProsusAI/FinBERT**.
-5. Merge the signals, scale the latest 60 trading days, and run the saved **Keras LSTM** model.
-6. Display the direction estimate and confidence in Streamlit.
+
+1. Calculate daily returns, five-day returns, moving averages, volatility, and historical sentiment features.
+
+1. Retrieve recent AAPL headlines from Alpha Vantage.
+
+1. Classify headline sentiment with **ProsusAI/FinBERT**.
+
+1. Merge the signals, scale the latest 60 trading days, and run the saved **Keras LSTM** model.
+
+1. Display the direction estimate and confidence in Streamlit.
 
 ## Feature set
 
 - `Daily_Return`
+
 - `Return_5D`
+
 - `MA_10`
+
 - `MA_20`
+
 - `Volatility_20D`
+
 - Daily financial-news sentiment
 
 ## Project structure
 
-```text
+```
 AAPL-FinanceAI/
 ├── app.py                          # Streamlit dashboard and inference pipeline
 ├── aapl_lstm_news_model.keras      # Trained LSTM model artifact
@@ -101,7 +105,7 @@ pip install -r requirements.txt
 
 Create `.streamlit/secrets.toml`:
 
-```toml
+```
 ALPHA_VANTAGE_API_KEY = "your_api_key_here"
 ```
 
@@ -116,10 +120,15 @@ streamlit run app.py
 ## Technology stack
 
 - **Streamlit** — interactive dashboard and presentation layer.
+
 - **yfinance** — historical AAPL market data.
+
 - **Alpha Vantage** — recent financial-news headlines.
+
 - **ProsusAI/FinBERT** — finance-specific sentiment classification.
+
 - **TensorFlow/Keras** — saved LSTM direction model.
+
 - **PyTorch + Hugging Face Transformers** — sentiment inference.
 
 ## Adding your own README images
@@ -127,11 +136,13 @@ streamlit run app.py
 GitHub renders images from files committed inside the repository. The simplest workflow is:
 
 1. Create an `assets/` folder in the repository.
-2. Add an image such as `assets/dashboard.png`.
-3. Reference it with a relative Markdown path:
+
+1. Add an image such as `assets/dashboard.png`.
+
+1. Reference it with a relative Markdown path:
 
 ```markdown
-![Dashboard screenshot](assets/dashboard.png)
+![Dashboard screenshot](assets/dashboard.png )
 ```
 
 For a centered image with a controlled width, use HTML supported by GitHub:
@@ -156,6 +167,6 @@ Built by **Samarth** as an applied machine-learning project connecting time-seri
 
 <div align="center">
 
-**[View the live demo](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/) · [Explore the code](https://github.com/samarth3868-coder/AAPL-FinanceAI)**
+[**View the live demo**](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)** · **[**Explore the code**](https://github.com/samarth3868-coder/AAPL-FinanceAI)
 
 </div>
