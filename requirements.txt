@@ -4,7 +4,7 @@ numpy
 requests
 yfinance
 joblib
-scikit-learn
+scikit-learn==1.7.1
 tensorflow
 torch==2.8.0
 transformers==4.57.1

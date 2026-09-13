@@ -7,7 +7,8 @@ import torch
 from datetime import datetime
 
 from tensorflow.keras.models import load_model
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers.models.auto.tokenization_auto import AutoTokenizer
+from transformers.models.auto.modeling_auto import AutoModelForSequenceClassification
 
 model = load_model("aapl_lstm_news_model.keras")
 
