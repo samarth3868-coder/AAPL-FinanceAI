@@ -58,7 +58,9 @@ def get_news():
 import torch
 tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 
-finbert_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
+finbert_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert",low_cpu_mem_usage=False)
+
+finbert_model.eval()
 
 def get_sentiment(text):
     inputs = tokenizer(text,return_tensors="pt", truncation=True)
