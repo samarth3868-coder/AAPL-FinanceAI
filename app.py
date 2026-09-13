@@ -43,7 +43,7 @@ def get_news():
         "function": "NEWS_SENTIMENT",
         "tickers": "AAPL",
         "sort": "LATEST",
-        "limit": 10,
+        "limit": 20,
         "apikey": API_KEY
     }
 
@@ -53,22 +53,22 @@ def get_news():
         timeout=20
     )
 
-    alpha_news = response.json()
+    return response.json()
 
-    # Alpha Vantage news available
-    if "feed" in alpha_news:
-        return alpha_news
-
-    # Fallback: yfinance news
-    ticker = yf.Ticker("AAPL")
-    yahoo_news = ticker.news
-
-    return {
-        "feed": yahoo_news
-    }
 
 news_data = get_news()
 
+articles = []
+
+for article in news_data.get("feed", []):
+
+    ticker_sentiment = article.get("ticker_sentiment", [])
+
+    for ticker in ticker_sentiment:
+
+        if ticker.get("ticker") == "AAPL":
+            articles.append(article)
+            break
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
@@ -200,14 +200,13 @@ for article in articles[:5]:
 
     title = article.get("title", "Untitled")
     url = article.get("url", "#")
-    source = article.get("source", "Yahoo Finance")
+    source = article.get("source", "Unknown")
 
     st.markdown(
         f"- [{title}]({url})"
     )
 
     st.caption(source)
-
 daily_sentiment = pd.read_csv("aapl_daily_sentiment.csv")
 
 daily_sentiment["date"] = pd.to_datetime(daily_sentiment["date"]).dt.date
