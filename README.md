@@ -1,4 +1,4 @@
-# AAPL Finance AI
+# AAPL Market Intelligence
 
 ### AI-Powered Stock Direction Prediction
 
