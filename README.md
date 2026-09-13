@@ -2,8 +2,6 @@
 
 ### AI-Powered Stock Direction Prediction
 
-<p align="center">
-<img src="P1.png" alt="AAPL Market Intelligence dashboard overview" width="100%">
 </p>
 
 An end-to-end financial machine learning application that combines **technical indicators** and **financial news sentiment** using **LSTM + FinBERT** to estimate the next-day direction of Apple (AAPL) stock.
@@ -37,7 +35,8 @@ The dashboard displays:
 - Latest news headlines
 
 - Next-day UP/DOWN prediction
-
+<p align="center">
+<img src="P1.png" alt="AAPL Market Intelligence dashboard overview" width="100%">
 <p align="center">
 <img src="P2.png" alt="Latest AAPL news and next-day prediction" width="100%">
 </p>
@@ -121,6 +120,4 @@ streamlit run app.py
 
 This project is designed for education and experimentation. It does not guarantee prediction accuracy, provide financial advice, or replace independent research. Market and news data may be delayed or temporarily unavailable. The model is trained for AAPL and should not automatically be applied to other securities.
 
-## Author
 
-Built by **Samarth** as a financial machine learning project combining time-series modeling, NLP, market data, and Streamlit.
