@@ -12,6 +12,12 @@
 <img src="assets/dashboard-preview.svg" alt="AAPL Finance AI dashboard preview" width="100%">
 </p>
 
+## Dashboard screenshot
+
+<p align="center">
+  <img src="assets/dashboard-screenshot.png" alt="Live AAPL Market Intelligence dashboard screenshot" width="100%">
+</p>
+
 > **Educational project:** Model outputs are experimental signals, not investment advice or a guarantee of future returns.
 
 ## Why this project?
@@ -79,6 +85,7 @@ AAPL-FinanceAI/
 ├── requirements.txt                # Python dependencies
 ├── assets/
 │   ├── dashboard-preview.svg       # README dashboard visual
+│   ├── dashboard-screenshot.png    # Live dashboard screenshot
 │   ├── architecture.mmd            # Editable Mermaid source
 │   └── architecture.png            # Rendered architecture diagram
 └── README.md
