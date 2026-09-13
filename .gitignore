@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+*.ipynb
+.streamlit/
+
+aapl_lstm_model.keras
+prepare_data.pkl
+prepared_data_with_news.pkl
