@@ -48,10 +48,23 @@ def get_news():
 
     response = requests.get(
         "https://www.alphavantage.co/query",
-        params=params
+        params=params,
+        timeout=20
     )
 
-    return response.json()
+    alpha_news = response.json()
+
+    # Alpha Vantage news available
+    if "feed" in alpha_news:
+        return alpha_news
+
+    # Fallback: yfinance news
+    ticker = yf.Ticker("AAPL")
+    yahoo_news = ticker.news
+
+    return {
+        "feed": yahoo_news
+    }
 
 news_data = get_news()
 
@@ -91,7 +104,10 @@ sentiments = []
 
 for article in articles:
 
-    text = article["title"] + ". " + article["summary"]
+    title = article.get("title", "")
+    summary = article.get("summary", "")
+
+    text = title + ". " + summary
 
     sentiment, confidence = get_sentiment(text)
 
@@ -170,10 +186,16 @@ st.line_chart(chart_data)
 st.subheader("Latest News")
 
 for article in articles[:5]:
+
+    title = article.get("title", "Untitled")
+    url = article.get("url", "#")
+    source = article.get("source", "Yahoo Finance")
+
     st.markdown(
-        f"- [{article['title']}]({article['url']})"
+        f"- [{title}]({url})"
     )
-    st.caption(article["source"])
+
+    st.caption(source)
 
 daily_sentiment = pd.read_csv("aapl_daily_sentiment.csv")
 
