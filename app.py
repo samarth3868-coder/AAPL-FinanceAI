@@ -179,7 +179,16 @@ st.subheader("AAPL Price Chart")
 
 chart_data = data[["Date", "Close"]].copy()
 
-st.line_chart(chart_data)
+chart_data["Close"] = pd.to_numeric(
+    chart_data["Close"],
+    errors="coerce"
+)
+
+chart_data = chart_data.dropna()
+
+chart_data = chart_data.set_index("Date")
+
+st.line_chart(chart_data["Close"])
 
 
 st.subheader("Latest News")
