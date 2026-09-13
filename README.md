@@ -46,17 +46,6 @@ The dashboard displays:
   <img src="model-architecture.png" alt="AAPL Finance AI model architecture" width="100%">
 </p>
 
-```text
-Historical AAPL data ──► Technical indicators ──┐
-                                                ├──► LSTM model ──► Next-day direction
-Financial news ────────► FinBERT sentiment ─────┘
-```
-
-The project uses technical indicators together with financial-news sentiment as model inputs. The prediction is represented as:
-
-```
-0 → DOWN
-1 → UP
 ```
 
 ## Technology stack
