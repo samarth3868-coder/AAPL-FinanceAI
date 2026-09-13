@@ -46,8 +46,6 @@ The dashboard displays:
   <img src="model-architecture.png" alt="AAPL Finance AI model architecture" width="100%">
 </p>
 
-```
-
 ## Technology stack
 
 | Technology | Role in the project |
