@@ -16,7 +16,7 @@ An end-to-end financial machine learning application that combines **technical i
 
 ## Live Demo
 
-🚀 **[Open AAPL Finance AI](https://aapl-financeai-erbvgxbwhbnky5sepasruq.streamlit.app/)**
+🚀 **[Open AAPL Finance AI](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)**
 
 ---
 
