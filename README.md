@@ -42,7 +42,11 @@ The dashboard displays:
 
 ## Model Architecture
 
-```
+<p align="center">
+  <img src="model-architecture.png" alt="AAPL Finance AI model architecture" width="100%">
+</p>
+
+```text
 Historical AAPL data ──► Technical indicators ──┐
                                                 ├──► LSTM model ──► Next-day direction
 Financial news ────────► FinBERT sentiment ─────┘
@@ -113,10 +117,10 @@ streamlit run app.py
 | `aapl_daily_sentiment.csv` | Daily sentiment data |
 | `P1.png` | Dashboard overview screenshot |
 | `P2.png` | News and prediction screenshot |
+| `model-architecture.png` | Model workflow and architecture diagram |
 | `requirements.txt` | Python dependencies |
 
 ## Limitations
 
 This project is designed for education and experimentation. It does not guarantee prediction accuracy, provide financial advice, or replace independent research. Market and news data may be delayed or temporarily unavailable. The model is trained for AAPL and should not automatically be applied to other securities.
-
 
