@@ -79,6 +79,12 @@ def get_sentiment(text):
     return sentiment, confidence
 
 news_data = get_news()
+
+
+if "feed" not in news_data:
+    st.error("Unable to fetch AAPL news right now.")
+    st.stop()
+
 articles = news_data["feed"]
 
 sentiments = []
