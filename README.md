@@ -18,6 +18,12 @@
   <img src="assets/dashboard-screenshot.png" alt="Live AAPL Market Intelligence dashboard screenshot" width="100%">
 </p>
 
+## Latest news and prediction
+
+<p align="center">
+  <img src="assets/news-prediction-screenshot.png" alt="Latest AAPL news and next-day prediction screenshot" width="100%">
+</p>
+
 > **Educational project:** Model outputs are experimental signals, not investment advice or a guarantee of future returns.
 
 ## Why this project?
@@ -86,6 +92,7 @@ AAPL-FinanceAI/
 ├── assets/
 │   ├── dashboard-preview.svg       # README dashboard visual
 │   ├── dashboard-screenshot.png    # Live dashboard screenshot
+│   ├── news-prediction-screenshot.png # News and prediction screenshot
 │   ├── architecture.mmd            # Editable Mermaid source
 │   └── architecture.png            # Rendered architecture diagram
 └── README.md
