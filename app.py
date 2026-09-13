@@ -98,7 +98,17 @@ if "feed" not in news_data:
     st.error("Unable to fetch AAPL news right now.")
     st.stop()
 
-articles = news_data["feed"]
+articles = []
+
+for article in news_data["feed"]:
+
+    ticker_sentiment = article.get("ticker_sentiment", [])
+
+    for ticker in ticker_sentiment:
+
+        if ticker.get("ticker") == "AAPL":
+            articles.append(article)
+            break
 
 sentiments = []
 
