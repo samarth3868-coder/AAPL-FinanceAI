@@ -8,7 +8,6 @@ An end-to-end financial machine learning application that combines **technical i
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)[![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM-orange?logo=tensorflow)](https://www.tensorflow.org/)[![PyTorch](https://img.shields.io/badge/PyTorch-FinBERT-red?logo=pytorch)](https://pytorch.org/)[![Transformers](https://img.shields.io/badge/Hugging%20Face-Transformers-yellow?logo=huggingface)](https://huggingface.co/)[![Streamlit](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)](https://streamlit.io/)[![yfinance](https://img.shields.io/badge/Data-yfinance-green)](https://github.com/ranaroussi/yfinance)[![Alpha Vantage](https://img.shields.io/badge/News-Alpha%20Vantage-purple)](https://www.alphavantage.co/)
 
-> **Educational project:** This dashboard is intended for learning and experimentation. Its model output is not investment advice or a guarantee of future performance.
 
 ## Live Demo
 
