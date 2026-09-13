@@ -5,6 +5,6 @@ requests
 yfinance
 joblib
 tensorflow
-torch
-transformers
-torchvision
+transformers==4.57.1
+torch==2.8.0
+torchvision==0.23.0
