@@ -1,267 +1,240 @@
-import streamlit as st
+from datetime import datetime, timezone
+from pathlib import Path
+
 import joblib
+import numpy as np
 import pandas as pd
 import requests
+import streamlit as st
 import yfinance as yf
-import torch
-from datetime import datetime
 
 from tensorflow.keras.models import load_model
-from transformers.models.auto.tokenization_auto import AutoTokenizer
-from transformers.models.auto.modeling_auto import AutoModelForSequenceClassification
-
-model = load_model("aapl_lstm_news_model.keras")
-
-scaler = joblib.load("aapl_scaler.pkl")
-
-features = joblib.load("aapl_features.pkl")
-
-st.title("AAPL Market Intelligence")
-
-data = yf.download(tickers="AAPL",period="6mo")
-
-data.columns = data.columns.get_level_values(0)
-
-data = data.reset_index()
-
-data["Daily_Return"] = data["Close"].pct_change()
-
-data["Return_5D"] = data["Close"].pct_change(5)
-
-data["MA_10"] = data["Close"].rolling(10).mean()
-
-data["MA_20"] = data["Close"].rolling(20).mean()
-
-data["Volatility_20D"] = data["Daily_Return"].rolling(20).std()
-
-API_KEY = st.secrets["ALPHA_VANTAGE_API_KEY"]
-
-@st.cache_data(ttl=3600)
-def get_news():
-
-    params = {
-        "function": "NEWS_SENTIMENT",
-        "tickers": "AAPL",
-        "sort": "LATEST",
-        "limit": 20,
-        "apikey": API_KEY
-    }
-
-    response = requests.get(
-        "https://www.alphavantage.co/query",
-        params=params,
-        timeout=20
-    )
-
-    return response.json()
-
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import torch
-tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
-
-finbert_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
-
-def get_sentiment(text):
-    inputs = tokenizer(text,return_tensors="pt", truncation=True)
-
-    with torch.no_grad():        
-        outputs = finbert_model(**inputs)
-
-    probabilities = torch.softmax(outputs.logits,dim=1)
-
-    predicted_class = probabilities.argmax(dim=1)
-
-    sentiment = finbert_model.config.id2label[predicted_class.item()]
-
-    confidence = probabilities[0, predicted_class.item()]
-
-    return sentiment, confidence
-
-news_data = get_news()
 
 
-if "feed" not in news_data:
-    st.error("Unable to fetch AAPL news right now.")
-    articles = []
-else:
-    articles = []
+# -----------------------------------------------------------------------------
+# App configuration and styling
+# -----------------------------------------------------------------------------
+BASE_DIR = Path(__file__).resolve().parent
+TICKER = "AAPL"
+NEWS_LIMIT = 20
 
-    for article in news_data["feed"]:
-
-        ticker_sentiment = article.get("ticker_sentiment", [])
-
-        for ticker in ticker_sentiment:
-
-            if ticker.get("ticker") == "AAPL":
-                articles.append(article)
-                break
-
-
-sentiments = []
-
-for article in articles:
-
-    title = article.get("title", "")
-    summary = article.get("summary", "")
-
-    text = title + ". " + summary
-
-    sentiment, confidence = get_sentiment(text)
-
-    sentiments.append(sentiment)
-
-sentiment_score = {
-    "positive": 1,
-    "neutral": 0,
-    "negative": -1
-}
-
-scores = [
-    sentiment_score[sentiment]
-    for sentiment in sentiments
-]
-
-if scores:
-    overall_sentiment = sum(scores) / len(scores)
-else:
-    overall_sentiment = 0.0
-
-# ===== MARKET OVERVIEW =====
-
-st.subheader("Market Overview")
-
-latest = data.iloc[-1]
-
-current_price = latest["Close"]
-daily_return = latest["Daily_Return"]
-return_5d = latest["Return_5D"]
-ma_10 = latest["MA_10"]
-ma_20 = latest["MA_20"]
-volatility = latest["Volatility_20D"]
-
-col1, col2 = st.columns(2)
-
-with col1:
-    st.metric("Current Price", f"${current_price:.2f}")
-
-with col2:
-    st.metric("Daily Return", f"{daily_return * 100:.2f}%")
-
-col3, col4 = st.columns(2)
-
-with col3:
-    st.metric("5-Day Return", f"{return_5d * 100:.2f}%")
-
-with col4:
-    st.metric("MA-10", f"${ma_10:.2f}")
-
-col5, col6 = st.columns(2)
-
-with col5:
-    st.metric("MA-20", f"${ma_20:.2f}")
-
-with col6:
-    st.metric("20-Day Volatility", f"{volatility:.4f}")
-
-
-st.subheader("News Sentiment")
-
-if overall_sentiment > 0.1:
-    sentiment_label = "Positive"
-elif overall_sentiment < -0.1:
-    sentiment_label = "Negative"
-else:
-    sentiment_label = "Neutral"
-
-st.write(f"Market sentiment: **{sentiment_label}**")
-
-
-st.subheader("AAPL Price Chart")
-
-chart_data = data[["Date", "Close"]].copy()
-
-chart_data["Close"] = pd.to_numeric(
-    chart_data["Close"],
-    errors="coerce"
+st.set_page_config(
+    page_title="AAPL Finance AI",
+    page_icon="📈",
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-chart_data = chart_data.dropna()
+st.markdown(
+    """
+    <style>
+    .block-container { max-width: 1250px; padding-top: 2rem; padding-bottom: 3rem; }
+    .hero { padding: 1.5rem 1.75rem; border-radius: 18px; background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%); color: white; margin-bottom: 1.25rem; }
+    .hero h1 { margin: 0; font-size: 2.35rem; letter-spacing: -0.04em; }
+    .hero p { color: #cbd5e1; margin: .45rem 0 0; font-size: 1.02rem; }
+    .eyebrow { color: #93c5fd; text-transform: uppercase; font-size: .75rem; font-weight: 700; letter-spacing: .12em; }
+    .pill { display: inline-block; padding: .3rem .7rem; border-radius: 999px; background: #dbeafe; color: #1d4ed8; font-weight: 700; font-size: .82rem; }
+    .muted { color: #64748b; font-size: .88rem; }
+    div[data-testid="stMetric"] { background: #f8fafc; border: 1px solid #e2e8f0; padding: .9rem 1rem; border-radius: 14px; }
+    .disclaimer { padding: .9rem 1rem; border-left: 4px solid #f59e0b; background: #fffbeb; color: #713f12; border-radius: 8px; font-size: .88rem; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-chart_data = chart_data.set_index("Date")
 
-st.line_chart(chart_data["Close"])
+# -----------------------------------------------------------------------------
+# Cached resources and data access
+# -----------------------------------------------------------------------------
+@st.cache_resource
+def load_artifacts():
+    model = load_model(BASE_DIR / "aapl_lstm_news_model.keras")
+    scaler = joblib.load(BASE_DIR / "aapl_scaler.pkl")
+    features = joblib.load(BASE_DIR / "aapl_features.pkl")
+    tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
+    sentiment_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
+    sentiment_model.eval()
+    return model, scaler, features, tokenizer, sentiment_model
 
 
-st.subheader("Latest News")
+@st.cache_data(ttl=900, show_spinner=False)
+def get_price_data(period="6mo"):
+    data = yf.download(TICKER, period=period, auto_adjust=False, progress=False)
+    if data.empty:
+        raise ValueError("No market data was returned by Yahoo Finance.")
+    if isinstance(data.columns, pd.MultiIndex):
+        data.columns = data.columns.get_level_values(0)
+    data = data.reset_index()
+    data["Date"] = pd.to_datetime(data["Date"]).dt.tz_localize(None)
+    data["Close"] = pd.to_numeric(data["Close"], errors="coerce")
+    data["Daily_Return"] = data["Close"].pct_change()
+    data["Return_5D"] = data["Close"].pct_change(5)
+    data["MA_10"] = data["Close"].rolling(10).mean()
+    data["MA_20"] = data["Close"].rolling(20).mean()
+    data["Volatility_20D"] = data["Daily_Return"].rolling(20).std()
+    return data.dropna(subset=["Close"]).copy()
 
-for article in articles[:5]:
 
-    title = article.get("title", "Untitled")
-    url = article.get("url", "#")
-    source = article.get("source", "Unknown")
-
-    st.markdown(
-        f"- [{title}]({url})"
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_news(api_key):
+    if not api_key:
+        return []
+    response = requests.get(
+        "https://www.alphavantage.co/query",
+        params={"function": "NEWS_SENTIMENT", "tickers": TICKER, "sort": "LATEST", "limit": NEWS_LIMIT, "apikey": api_key},
+        timeout=20,
     )
+    response.raise_for_status()
+    payload = response.json()
+    return payload.get("feed", [])
 
-    st.caption(source)
-daily_sentiment = pd.read_csv("aapl_daily_sentiment.csv")
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def score_news(articles):
+    if not articles:
+        return [], 0.0
+    _, _, _, tokenizer, sentiment_model = load_artifacts()
+    labels, scores = [], []
+    label_score = {"positive": 1, "neutral": 0, "negative": -1}
+    for article in articles:
+        text = f"{article.get('title', '')}. {article.get('summary', '')}".strip()
+        inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=256)
+        with torch.no_grad():
+            probabilities = torch.softmax(sentiment_model(**inputs).logits, dim=1)[0]
+        index = int(probabilities.argmax())
+        label = sentiment_model.config.id2label[index].lower()
+        confidence = float(probabilities[index])
+        labels.append({"label": label, "confidence": confidence})
+        scores.append(label_score.get(label, 0))
+    return labels, float(np.mean(scores)) if scores else 0.0
+
+
+def sentiment_label(score):
+    if score > 0.1:
+        return "Positive", "🟢"
+    if score < -0.1:
+        return "Negative", "🔴"
+    return "Neutral", "🟡"
+
+
+def fmt_pct(value):
+    return "—" if pd.isna(value) else f"{value * 100:+.2f}%"
+
+
+# -----------------------------------------------------------------------------
+# Load data and calculate the live signal
+# -----------------------------------------------------------------------------
+with st.sidebar:
+    st.markdown("### Dashboard controls")
+    st.caption("Data refreshes automatically. Cached results reduce API calls and startup time.")
+    period = st.selectbox("Price history", ["3mo", "6mo", "1y"], index=1)
+    st.divider()
+    st.markdown("**Model stack**")
+    st.caption("LSTM + FinBERT\nTechnical indicators + news sentiment")
+    st.divider()
+    st.caption("Educational research tool — not investment advice.")
+
+st.markdown(
+    '<div class="hero"><div class="eyebrow">AI-powered market intelligence</div><h1>AAPL Finance AI</h1><p>Combining technical signals and financial news sentiment to estimate next-day direction.</p></div>',
+    unsafe_allow_html=True,
+)
+
+try:
+    with st.spinner("Loading market data and model signal..."):
+        model, scaler, features, _, _ = load_artifacts()
+        data = get_price_data(period)
+        api_key = st.secrets.get("ALPHA_VANTAGE_API_KEY", "")
+        articles = get_news(api_key)
+        article_scores, overall_sentiment = score_news(tuple(articles))
+except Exception as exc:
+    st.error("The dashboard could not load its live data.")
+    st.caption(f"Technical detail: {exc}")
+    st.stop()
+
+# Merge historical sentiment for the LSTM feature set.
+sentiment_path = BASE_DIR / "aapl_daily_sentiment.csv"
+daily_sentiment = pd.read_csv(sentiment_path)
 daily_sentiment["date"] = pd.to_datetime(daily_sentiment["date"]).dt.date
-
-data = data.reset_index()
-
-data["date"] = pd.to_datetime(data["Date"]).dt.date
-
-data = data.merge(
-    daily_sentiment,
-    on="date",
-    how="left")
-
-data["sentiment"] = data["sentiment"].fillna(0)
-
+data["date"] = data["Date"].dt.date
+data = data.merge(daily_sentiment, on="date", how="left")
+data["sentiment"] = data["sentiment"].fillna(0.0)
 data.loc[data.index[-1], "sentiment"] = overall_sentiment
 
-X_live = data[features].copy()
+prediction_probability = None
+prediction = "Unavailable"
+model_input = data[list(features)].dropna()
+if len(model_input) >= 60:
+    scaled = scaler.transform(model_input.tail(60))
+    prediction_probability = float(model.predict(np.expand_dims(scaled, axis=0), verbose=0)[0][0])
+    prediction = "UP" if prediction_probability >= 0.5 else "DOWN"
 
-X_live = X_live.dropna()
+latest = data.iloc[-1]
+current_price = float(latest["Close"])
+daily_return = float(latest["Daily_Return"])
+return_5d = float(latest["Return_5D"])
+ma_10 = float(latest["MA_10"])
+ma_20 = float(latest["MA_20"])
+volatility = float(latest["Volatility_20D"])
+trend = "Bullish" if current_price > ma_10 and current_price > ma_20 else "Bearish" if current_price < ma_10 and current_price < ma_20 else "Mixed"
+news_label, news_icon = sentiment_label(overall_sentiment)
+last_updated = latest["Date"].strftime("%d %b %Y")
 
-last_60 = X_live.tail(60)
+# -----------------------------------------------------------------------------
+# Dashboard sections
+# -----------------------------------------------------------------------------
+st.markdown(f'<span class="pill">{TICKER} · Last market data: {last_updated}</span>', unsafe_allow_html=True)
+st.markdown("### Market snapshot")
+metrics = st.columns(4)
+metrics[0].metric("Current price", f"${current_price:,.2f}", fmt_pct(daily_return))
+metrics[1].metric("5-day return", fmt_pct(return_5d))
+metrics[2].metric("Trend", trend)
+metrics[3].metric("20-day volatility", f"{volatility * 100:.2f}%")
 
-scaled_60 = scaler.transform(last_60)
+left, right = st.columns([1.4, 1])
+with left:
+    st.markdown("### Price momentum")
+    chart = data.set_index("Date")[["Close", "MA_10", "MA_20"]].rename(columns={"Close": "Price", "MA_10": "10-day MA", "MA_20": "20-day MA"})
+    st.line_chart(chart, height=340)
+with right:
+    st.markdown("### Next-day model signal")
+    if prediction == "UP":
+        st.success("▲ UP", icon="📈")
+    elif prediction == "DOWN":
+        st.error("▼ DOWN", icon="📉")
+    else:
+        st.warning("Signal unavailable", icon="⚠️")
+    if prediction_probability is not None:
+        confidence = prediction_probability if prediction == "UP" else 1 - prediction_probability
+        st.metric("Model confidence", f"{confidence * 100:.1f}%")
+        st.progress(confidence)
+    st.markdown(f"**News sentiment:** {news_icon} {news_label}")
+    st.caption(f"Based on {len(articles)} recent AAPL articles. Sentiment index: {overall_sentiment:+.2f}")
+    st.markdown("<div class='disclaimer'>This is an experimental model output, not a recommendation to buy or sell securities.</div>", unsafe_allow_html=True)
 
-import numpy as np
+news_tab, methodology_tab = st.tabs(["Latest news", "Methodology"])
+with news_tab:
+    if not articles:
+        if not api_key:
+            st.info("Add ALPHA_VANTAGE_API_KEY to Streamlit secrets to enable live news sentiment.")
+        else:
+            st.info("No recent AAPL news was returned.")
+    for article, scored in zip(articles[:8], article_scores[:8]):
+        title = article.get("title", "Untitled article")
+        url = article.get("url", "#")
+        source = article.get("source", "Unknown source")
+        label = scored["label"].title()
+        st.markdown(f"**[{title}]({url})**")
+        st.caption(f"{source} · {label} sentiment · {scored['confidence'] * 100:.0f}% confidence")
+        st.divider()
 
-input_data = np.expand_dims(scaled_60,axis=0)
+with methodology_tab:
+    st.markdown("""
+    The application combines **10-day and 20-day moving averages**, daily and 5-day returns, 20-day volatility, and a daily news-sentiment feature. Financial headlines are scored with **ProsusAI/FinBERT**, then the most recent 60 trading days are scaled and passed to the trained **LSTM** model.
 
-prediction_probability = model.predict(input_data)[0][0]
-
-if prediction_probability >= 0.5:
-    prediction = "UP"
-else:
-    prediction = "DOWN"
-
-st.subheader("Next-Day Prediction")
-
-if prediction == "UP":
-    st.success("UP")
-else:
-    st.error("DOWN")
-
-
-if current_price > ma_10 and current_price > ma_20:
-    trend = "Bullish"
-elif current_price < ma_10 and current_price < ma_20:
-    trend = "Bearish"
-else:
-    trend = "Mixed"
-
-
-
-
-
-with st.expander("How does this prediction work?"):
-    st.write("""
-    The model combines technical indicators with financial
-    news sentiment and uses the last 60 trading days to
-    predict the next-day direction.
+    The displayed UP/DOWN signal represents the model's estimated direction for the next trading day. It is intended for experimentation and portfolio-research education; it has not been presented as a guarantee of future performance.
     """)
+    st.info("Data sources: Yahoo Finance for market data and Alpha Vantage for news sentiment.")
+
+st.caption(f"Refreshed {datetime.now(timezone.utc).strftime('%d %b %Y at %H:%M UTC')} · Built with Streamlit, TensorFlow, PyTorch, and Hugging Face Transformers")
