@@ -3,24 +3,18 @@
 ### AI-Powered Stock Direction Prediction
 
 <p align="center">
-  <img src="P1.png" alt="AAPL Market Intelligence dashboard overview" width="100%">
+<img src="P1.png" alt="AAPL Market Intelligence dashboard overview" width="100%">
 </p>
 
 An end-to-end financial machine learning application that combines **technical indicators** and **financial news sentiment** using **LSTM + FinBERT** to estimate the next-day direction of Apple (AAPL) stock.
 
-[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM-orange?logo=tensorflow)](https://www.tensorflow.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-FinBERT-red?logo=pytorch)](https://pytorch.org/)
-[![Transformers](https://img.shields.io/badge/Hugging%20Face-Transformers-yellow?logo=huggingface)](https://huggingface.co/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)](https://streamlit.io/)
-[![yfinance](https://img.shields.io/badge/Data-yfinance-green)](https://github.com/ranaroussi/yfinance)
-[![Alpha Vantage](https://img.shields.io/badge/News-Alpha%20Vantage-purple)](https://www.alphavantage.co/)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)[![TensorFlow](https://img.shields.io/badge/TensorFlow-LSTM-orange?logo=tensorflow)](https://www.tensorflow.org/)[![PyTorch](https://img.shields.io/badge/PyTorch-FinBERT-red?logo=pytorch)](https://pytorch.org/)[![Transformers](https://img.shields.io/badge/Hugging%20Face-Transformers-yellow?logo=huggingface)](https://huggingface.co/)[![Streamlit](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)](https://streamlit.io/)[![yfinance](https://img.shields.io/badge/Data-yfinance-green)](https://github.com/ranaroussi/yfinance)[![Alpha Vantage](https://img.shields.io/badge/News-Alpha%20Vantage-purple)](https://www.alphavantage.co/)
 
 > **Educational project:** This dashboard is intended for learning and experimentation. Its model output is not investment advice or a guarantee of future performance.
 
 ## Live Demo
 
-**[Open AAPL Finance AI](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)**
+[**Open AAPL Finance AI**](https://aapl-financeai-gzgjdzvbvm3segt8ksw6qq.streamlit.app/)
 
 ## Overview
 
@@ -31,20 +25,26 @@ AAPL Finance AI combines market price information with financial news sentiment 
 The dashboard displays:
 
 - Current AAPL price and daily return
+
 - Five-day return and moving averages
+
 - Twenty-day volatility
+
 - Financial-news sentiment
+
 - AAPL price history chart
+
 - Latest news headlines
+
 - Next-day UP/DOWN prediction
 
 <p align="center">
-  <img src="P2.png" alt="Latest AAPL news and next-day prediction" width="100%">
+<img src="P2.png" alt="Latest AAPL news and next-day prediction" width="100%">
 </p>
 
 ## Model workflow
 
-```text
+```
 Historical AAPL data ──► Technical indicators ──┐
                                                 ├──► LSTM model ──► Next-day direction
 Financial news ────────► FinBERT sentiment ─────┘
@@ -52,7 +52,7 @@ Financial news ────────► FinBERT sentiment ─────┘
 
 The project uses technical indicators together with financial-news sentiment as model inputs. The prediction is represented as:
 
-```text
+```
 0 → DOWN
 1 → UP
 ```
@@ -60,11 +60,17 @@ The project uses technical indicators together with financial-news sentiment as 
 ## Technology stack
 
 - **Python** — application and data-processing language
+
 - **Streamlit** — interactive dashboard
+
 - **yfinance** — historical AAPL market data
+
 - **Alpha Vantage** — financial-news data
+
 - **FinBERT** — finance-specific sentiment analysis
+
 - **TensorFlow/Keras** — LSTM direction model
+
 - **PyTorch and Transformers** — sentiment-model inference
 
 ## Run locally
@@ -88,7 +94,7 @@ pip install -r requirements.txt
 
 Create `.streamlit/secrets.toml`:
 
-```toml
+```
 ALPHA_VANTAGE_API_KEY = "your_api_key_here"
 ```
 
