@@ -33,7 +33,7 @@ data["MA_20"] = data["Close"].rolling(20).mean()
 
 data["Volatility_20D"] = data["Daily_Return"].rolling(20).std()
 
-API_KEY = "YOUR_ALPHA_VANTAGE_API_KEY"
+API_KEY = st.secrets["ALPHA_VANTAGE_API_KEY"]
 
 @st.cache_data(ttl=3600)
 def get_news():
