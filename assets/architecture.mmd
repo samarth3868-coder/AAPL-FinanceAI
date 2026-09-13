@@ -1,0 +1,20 @@
+flowchart LR
+    A[Yahoo Finance\nAAPL price history] --> B[Feature engineering\nreturns · moving averages · volatility]
+    C[Alpha Vantage\nfinancial news] --> D[FinBERT\nsentiment classification]
+    B --> E[Feature merge\nlast 60 trading days]
+    D --> E
+    E --> F[Saved scaler]
+    F --> G[LSTM model]
+    G --> H[Next-day direction\nUP / DOWN + confidence]
+    H --> I[Streamlit dashboard]
+    B --> I
+    D --> I
+
+    classDef source fill:#dbeafe,stroke:#2563eb,color:#0f172a;
+    classDef process fill:#e0f2fe,stroke:#0284c7,color:#0f172a;
+    classDef model fill:#ede9fe,stroke:#7c3aed,color:#0f172a;
+    classDef output fill:#dcfce7,stroke:#16a34a,color:#0f172a;
+    class A,C source;
+    class B,D,E,F process;
+    class G model;
+    class H,I output;

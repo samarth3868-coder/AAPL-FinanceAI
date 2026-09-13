@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">AAPL Finance AI dashboard preview</title>
+  <desc id="desc">Dark blue dashboard mockup showing market metrics, a price chart, an AI signal, and news sentiment.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f8fafc"/></linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity=".18"/></filter>
+  </defs>
+  <rect width="1400" height="820" rx="28" fill="#e2e8f0"/>
+  <rect x="32" y="32" width="1336" height="756" rx="22" fill="#f8fafc" filter="url(#shadow)"/>
+  <rect x="32" y="32" width="1336" height="188" rx="22" fill="url(#bg)"/>
+  <text x="76" y="82" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#93c5fd" letter-spacing="3">AI-POWERED MARKET INTELLIGENCE</text>
+  <text x="76" y="138" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#ffffff">AAPL Finance AI</text>
+  <text x="76" y="174" font-family="Arial, sans-serif" font-size="18" fill="#cbd5e1">Technical signals + financial news sentiment + LSTM direction model</text>
+  <rect x="1130" y="86" width="176" height="42" rx="21" fill="#dbeafe"/><text x="1218" y="113" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#1d4ed8">AAPL · LIVE VIEW</text>
+  <g font-family="Arial, sans-serif">
+    <rect x="68" y="258" width="286" height="112" rx="16" fill="url(#card)" stroke="#e2e8f0"/><text x="92" y="291" font-size="15" fill="#64748b">Current price</text><text x="92" y="340" font-size="32" font-weight="700" fill="#0f172a">$227.16</text><text x="267" y="340" font-size="15" fill="#16a34a">+1.24%</text>
+    <rect x="374" y="258" width="286" height="112" rx="16" fill="url(#card)" stroke="#e2e8f0"/><text x="398" y="291" font-size="15" fill="#64748b">5-day return</text><text x="398" y="340" font-size="32" font-weight="700" fill="#0f172a">+2.86%</text>
+    <rect x="680" y="258" width="286" height="112" rx="16" fill="url(#card)" stroke="#e2e8f0"/><text x="704" y="291" font-size="15" fill="#64748b">Trend</text><text x="704" y="340" font-size="32" font-weight="700" fill="#0f172a">Bullish</text>
+    <rect x="986" y="258" width="286" height="112" rx="16" fill="url(#card)" stroke="#e2e8f0"/><text x="1010" y="291" font-size="15" fill="#64748b">20-day volatility</text><text x="1010" y="340" font-size="32" font-weight="700" fill="#0f172a">1.84%</text>
+    <rect x="68" y="402" width="760" height="324" rx="16" fill="#ffffff" stroke="#e2e8f0"/><text x="96" y="442" font-size="20" font-weight="700" fill="#0f172a">Price momentum</text><text x="96" y="468" font-size="13" fill="#64748b">Price with 10-day and 20-day moving averages</text>
+    <line x1="102" y1="668" x2="790" y2="668" stroke="#cbd5e1"/><line x1="102" y1="520" x2="102" y2="668" stroke="#cbd5e1"/>
+    <path d="M102 640 C150 620 160 570 210 590 S260 630 310 560 S370 525 420 555 S470 595 515 520 S570 500 620 535 S680 565 730 475 S770 490 790 440" fill="none" stroke="#2563eb" stroke-width="5"/>
+    <path d="M102 628 C180 610 230 604 300 585 S420 570 500 555 S620 535 700 515 S760 495 790 480" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8 7"/>
+    <path d="M102 635 C180 625 240 618 310 605 S440 585 520 575 S640 555 720 540 S770 525 790 515" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="4 6"/>
+    <circle cx="790" cy="440" r="7" fill="#2563eb"/>
+    <rect x="858" y="402" width="414" height="324" rx="16" fill="#ffffff" stroke="#e2e8f0"/><text x="886" y="442" font-size="20" font-weight="700" fill="#0f172a">Next-day model signal</text><rect x="886" y="476" width="120" height="54" rx="12" fill="#dcfce7"/><text x="946" y="511" text-anchor="middle" font-size="24" font-weight="700" fill="#15803d">▲ UP</text><text x="886" y="570" font-size="14" fill="#64748b">Model confidence</text><text x="886" y="610" font-size="32" font-weight="700" fill="#0f172a">72.4%</text><rect x="886" y="632" width="330" height="12" rx="6" fill="#dbeafe"/><rect x="886" y="632" width="239" height="12" rx="6" fill="#2563eb"/><text x="886" y="686" font-size="15" fill="#475569">News sentiment: 🟢 Positive</text>
+  </g>
+</svg>
