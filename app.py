@@ -18,11 +18,11 @@ features = joblib.load("aapl_features.pkl")
 
 st.title("AAPL Market Intelligence")
 
-st.button("Refresh Data")
-
 data = yf.download(tickers="AAPL",period="6mo")
 
 data.columns = data.columns.get_level_values(0)
+
+data = data.reset_index()
 
 data["Daily_Return"] = data["Close"].pct_change()
 
@@ -55,24 +55,7 @@ def get_news():
 
     return response.json()
 
-
-news_data = get_news()
-
-articles = []
-
-for article in news_data.get("feed", []):
-
-    ticker_sentiment = article.get("ticker_sentiment", [])
-
-    for ticker in ticker_sentiment:
-
-        if ticker.get("ticker") == "AAPL":
-            articles.append(article)
-            break
-
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
-
 tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 
 finbert_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
@@ -80,7 +63,8 @@ finbert_model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/fin
 def get_sentiment(text):
     inputs = tokenizer(text,return_tensors="pt", truncation=True)
 
-    outputs = finbert_model(**inputs)
+    with torch.no_grad():        
+        outputs = finbert_model(**inputs)
 
     probabilities = torch.softmax(outputs.logits,dim=1)
 
@@ -97,19 +81,20 @@ news_data = get_news()
 
 if "feed" not in news_data:
     st.error("Unable to fetch AAPL news right now.")
-    st.stop()
+    articles = []
+else:
+    articles = []
 
-articles = []
+    for article in news_data["feed"]:
 
-for article in news_data["feed"]:
+        ticker_sentiment = article.get("ticker_sentiment", [])
 
-    ticker_sentiment = article.get("ticker_sentiment", [])
+        for ticker in ticker_sentiment:
 
-    for ticker in ticker_sentiment:
+            if ticker.get("ticker") == "AAPL":
+                articles.append(article)
+                break
 
-        if ticker.get("ticker") == "AAPL":
-            articles.append(article)
-            break
 
 sentiments = []
 
@@ -135,7 +120,10 @@ scores = [
     for sentiment in sentiments
 ]
 
-overall_sentiment = sum(scores) / len(scores)
+if scores:
+    overall_sentiment = sum(scores) / len(scores)
+else:
+    overall_sentiment = 0.0
 
 # ===== MARKET OVERVIEW =====
 
@@ -189,7 +177,7 @@ st.write(f"Market sentiment: **{sentiment_label}**")
 
 st.subheader("AAPL Price Chart")
 
-chart_data = data[["Close"]].copy()
+chart_data = data[["Date", "Close"]].copy()
 
 st.line_chart(chart_data)
 
