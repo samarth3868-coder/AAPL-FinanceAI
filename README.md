@@ -15,13 +15,13 @@
 ## Dashboard screenshot
 
 <p align="center">
-  <img src="assets/dashboard-screenshot.png" alt="Live AAPL Market Intelligence dashboard screenshot" width="100%">
+<img src="assets/dashboard-screenshot.png" alt="Live AAPL Market Intelligence dashboard screenshot" width="100%">
 </p>
 
 ## Latest news and prediction
 
 <p align="center">
-  <img src="assets/news-prediction-screenshot.png" alt="Latest AAPL news and next-day prediction screenshot" width="100%">
+<img src="assets/news-prediction-screenshot.png" alt="Latest AAPL news and next-day prediction screenshot" width="100%">
 </p>
 
 > **Educational project:** Model outputs are experimental signals, not investment advice or a guarantee of future returns.
@@ -156,7 +156,7 @@ GitHub renders images from files committed inside the repository. The simplest w
 1. Reference it with a relative Markdown path:
 
 ```markdown
-![Dashboard screenshot](assets/dashboard.png )
+![Dashboard screenshot](assets/dashboard.png  )
 ```
 
 For a centered image with a controlled width, use HTML supported by GitHub:
